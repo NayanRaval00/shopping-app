@@ -1,8 +1,22 @@
+/* @import url('/public/css/animate.css');
+@import url('/public/css/icomoon.css');
+@import url('/public/css/ionicons.min.css');
+@import url('/public/css/bootstrap.min.css');
+@import url('/public/css/magnific-popup.css');
+@import url('/public/css/flexslider.css');
+@import url('/public/css/owl.carousel.min.css');
+@import url('/public/css/owl.theme.default.min.css');
+@import url('/public/css/bootstrap-datepicker.css');
+@import url('/public/fonts/flaticon/font/flaticon.css');
+@import url('/public/css/style.css'); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* styles/global.css */
+/* Combined CSS from all your CSS files */
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -30,4 +44,4 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
+} */
