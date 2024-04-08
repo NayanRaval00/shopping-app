@@ -38,7 +38,7 @@ const Header = (props) => {
         };
 
         navigator.getBattery().then(function (bat) {
-            battery = bat; 
+            battery = bat;
             updateBatteryStatus();
             battery.addEventListener('levelchange', updateBatteryStatus);
         });
@@ -56,7 +56,7 @@ const Header = (props) => {
 
         return () => {
             document.removeEventListener('click', handleOutsideClick);
-            if (battery) { 
+            if (battery) {
                 battery.removeEventListener('levelchange', updateBatteryStatus);
             }
         };
@@ -70,7 +70,7 @@ const Header = (props) => {
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-7 col-md-9">
-                                <div id="colorlib-logo"><a href="#">Footwear</a></div>
+                                <div id="colorlib-logo"><Link href="/">Footwear</Link></div>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <form action="#" className="search-wrap">
@@ -88,7 +88,9 @@ const Header = (props) => {
                                 <ul>
                                     <li className="active"><Link href="/">Home</Link></li>
                                     <li className={dropdownOpen ? 'has-dropdown active' : 'has-dropdown'}>
-                                        <span style={{ cursor: 'pointer', marginRight: '12px' }} onClick={toggleDropdown}>Men</span>
+                                        <span style={{ cursor: 'pointer', marginRight: '12px' }} onMouseEnter={toggleDropdown}>
+                                            <Link href='/men'>Men</Link>
+                                        </span>
                                         <ul className={dropdownOpen ? 'dropdown active animated-fast fadeInUpMenu' : 'dropdown'} style={dropdownOpen ? { display: 'block' } : {}}>
                                             <li><Link href="/product/1">Product Details</Link></li>
                                             <li><span >Shopping Cart</span></li>
@@ -97,7 +99,7 @@ const Header = (props) => {
                                             <li><span >Wishlist</span></li>
                                         </ul>
                                     </li>
-                                    <li><span style={{ cursor: 'pointer' }}>Women</span></li>
+                                    <li><span style={{ cursor: 'pointer' }}><Link href="/women">women</Link></span></li>
                                     <li><Link href="/about">About</Link></li>
                                     <li><Link href="/contact">Contact</Link></li>
                                     <li className="cart"><span><i className="icon-shopping-cart"></i> <Link href="/cart">Cart [{props.cartCount}]</Link></span></li>

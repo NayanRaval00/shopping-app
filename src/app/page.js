@@ -17,7 +17,7 @@ export default function Home() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 3000,
     initialSlide: 0,
     //variableWidth: true,
@@ -47,44 +47,43 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div id="page">
         <Header />
-        <Slider className='thankyou-order-slider' {...settings} ref={sliderRef}>
+        <Slider className='thankyou-order-slider' {...settings} ref={sliderRef} >
+          <div>
+            <Image
+              src="/images/img_bg_1.jpg"
+              sizes="50vw"
+              width={50}
+              height={50}
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
+              alt="Picture of the author"
+            />
+          </div>
+          <div>
+            <Image
+              src="/images/img_bg_2.jpg"
+              sizes="50vw"
+              width={50}
+              height={50}
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
+              alt="Picture of the author"
+            />
+          </div>
           <div>
             <Image
               src="/images/img_bg_3.jpg"
-              width={500}
-              height={500}
-              alt="Picture of the author"
-            />
-          </div>
-          <div>
-            <Image
-              src="/images/item-14.jpg"
-              width={500}
-              height={500}
-              alt="Picture of the author"
-            />
-          </div>
-          <div>
-            <Image
-              src="/images/blog-3.jpg"
-              width={500}
-              height={500}
-              alt="Picture of the author"
-            />
-          </div>
-          <div>
-            <Image
-              src="/images/brand-4.jpg"
-              width={500}
-              height={500}
-              alt="Picture of the author"
-            />
-          </div>
-          <div>
-            <Image
-              src="/images/brand-5.jpg"
-              width={500}
-              height={500}
+              sizes="50vw"
+              width={50}
+              height={50}
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
               alt="Picture of the author"
             />
           </div>
