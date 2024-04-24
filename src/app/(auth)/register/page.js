@@ -10,7 +10,7 @@ import AlertMessage from '@/app/components/AlertMessage/AlertMessage';
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { userRegister } from '@/lib/api/auth/auth'
+import { userRegister } from '../../../../lib/api/auth/auth';
 
 
 const Registration = () => {
