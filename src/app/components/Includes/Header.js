@@ -103,6 +103,9 @@ const Header = (props) => {
                                     <li><Link href="/about">About</Link></li>
                                     <li><Link href="/contact">Contact</Link></li>
                                     <li className="cart"><span><i className="icon-shopping-cart"></i> <Link href="/cart">Cart [{props.cartCount}]</Link></span></li>
+                                    <li>
+                                        <Link href={'/login'}>Login/Register</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
