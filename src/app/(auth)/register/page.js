@@ -8,14 +8,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import AlertMessage from '@/app/components/AlertMessage/AlertMessage';
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { userRegister } from '../../../../lib/api/auth/auth';
 
 
 const Registration = () => {
 
-    const urlParams = useSearchParams()
     const [successAlert, setSuccessAlert] = useState(null)
     const [errorAlert, setErrorAlert] = useState(null)
     const { userData } = useSession();
@@ -23,9 +21,6 @@ const Registration = () => {
         email: '',
         password: ''
     })
-    console.log(userData, 'userData');
-    const error = urlParams.get('error')
-
 
     const schema = yup.object().shape({
         firstname: yup.string().trim().required('First Name is required'),
@@ -69,14 +64,6 @@ const Registration = () => {
             window.location.href = path ? path : '/'
         }
     }, [userData])
-    useEffect(() => {
-        if (error) {
-            setErrorAlert(error)
-        }
-    }, [error])
-
-
-
     return (
         <section className="vh-100 gradient-custom">
             <div className="container py-5 h-100">
