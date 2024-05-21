@@ -4,8 +4,8 @@ const RegisterForm = ({ RegisterForm, errors, register }) => {
     return (
         <>
             <div className="form-outline form-white mb-4">
-                <input {...register('firstname')} type="text" id="typeEmailX" className="form-control form-control-lg" />
-                <p className="text-danger">{errors.firstname?.message}</p>
+                <input {...register('name')} type="text" id="typeEmailX" className="form-control form-control-lg" />
+                <p className="text-danger">{errors.name?.message}</p>
                 <label className="form-label" >First Name</label>
             </div>
             <div className="form-outline form-white mb-4">
@@ -30,8 +30,8 @@ const RegisterForm = ({ RegisterForm, errors, register }) => {
             </div>
 
             <div className="form-outline form-white mb-4">
-                <input {...register('confirm_password')} type="password" id="typePasswordX" className="form-control form-control-lg" />
-                <p className="text-danger">{errors.confirm_password?.message}</p>
+                <input {...register('password_confirmation')} type="password" id="typePasswordX" className="form-control form-control-lg" />
+                <p className="text-danger">{errors.password_confirmation?.message}</p>
                 <label className="form-label" >Confirm Password</label>
             </div>
 

@@ -1,0 +1,30 @@
+.testclass {
+    font-weight: bold;
+}
+
+.thankyou-order-slider {
+    /* Default styles for the slider */
+}
+
+
+@media (max-width: 1024px) {
+    /* Styles for screen width up to 1024px */
+    .thankyou-order-slider {
+        height: 10px;
+        width: 50px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Styles for screen width up to 600px */
+    .thankyou-order-slider {
+        border: dotted red;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Styles for screen width up to 480px */
+    .thankyou-order-slider {
+        border: dotted pink;
+    }
+}

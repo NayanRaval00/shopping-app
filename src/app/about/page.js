@@ -1,5 +1,6 @@
 import Footer from "../components/Includes/Footer";
 import Header from "../components/Includes/Header";
+import { FaPlayCircle } from "react-icons/fa";
 
 export default function About() {
     return (
@@ -24,7 +25,9 @@ export default function About() {
                         <div className="col-sm-6 mb-3">
                             <div className="video colorlib-video" style={{ backgroundImage: 'url(/images/about.jpg)' }}>
 
-                                <a href="https://vimeo.com/channels/staffpicks/93951774" className="popup-vimeo"><i className="icon-play3"></i></a>
+                                <a href="https://vimeo.com/channels/staffpicks/93951774" className="popup-vimeo">
+                                    <FaPlayCircle className="w-auto" />
+                                </a>
                                 <div className="overlay"></div>
                             </div>
                         </div>

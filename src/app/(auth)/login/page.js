@@ -12,24 +12,30 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form';
 import AlertMessage from '@/app/components/AlertMessage/AlertMessage';
+import useCookieOperations from '../../../../lib/useCookieOperations';
 
 const Login = () => {
 
+    const { data: userData } = useSession();
+    console.log(userData, 'userData');
     const urlParams = useSearchParams()
     const [successAlert, setSuccessAlert] = useState(null)
     const [errorAlert, setErrorAlert] = useState(null)
-    const { userData } = useSession();
+    const { setCookieValue } = useCookieOperations('user_data')
     const [loginForm, setLoginForm] = useState({
         email: '',
         password: ''
     })
-    console.log(userData, 'userData');
     const error = urlParams.get('error')
     const onSubmit = async event => {
+
+        const session = await getSession();
+        console.log(session, 'session');
+
         try {
-            //setLoading(true)
+            //setLoading(true)  
             const res = await signIn('login', { ...loginForm, redirect: false })
-            setSuccessAlert(res.message, "success")
+            console.log(res, 'res');
             //   setLoading(false)
             if (res.error) {
                 setErrorAlert(res.error)
@@ -66,13 +72,22 @@ const Login = () => {
             trigger('password')
         }
     }
+    const referrer = urlParams.get('referrer')
+    const path = referrer ? new URL(referrer).pathname : null
 
     useEffect(() => {
+        if (userData?.user) {
+            console.log(userData, 'userData');
+            if (userData?.user) {
+                setCookieValue(userData.user)
+            }
+        }
         if (userData?.user) {
             window.location.href = path ? path : '/'
         }
     }, [userData])
     useEffect(() => {
+        console.log(userData, 'userData');
         if (error) {
             setErrorAlert(error)
         }
@@ -116,7 +131,7 @@ const Login = () => {
                                     <p className="mb-0">Don't have an account? <Link href='/register' className="text-white-50 fw-bold">Register</Link>
                                     </p>
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ import { userLogin, userRegister } from '../../../../../../lib/api/auth/auth'
 const credentialsProvider = (id, authorize) => CredentialsProvider({ id, authorize })
 
 const authOptions = {
+    strategy: 'jwt',
     providers: [
         credentialsProvider('login', async credentials => await userLogin(credentials)),
         credentialsProvider('register', async credentials => await userRegister(credentials)),
@@ -14,9 +15,12 @@ const authOptions = {
         error: '/login',
         signOut: '/login'
     },
+    secret: process.env.NEXTAUTH_SECRET,
+    cookies: {
+        domain: process.env.NEXTAUTH_COOKIE_DOMAIN
+    },
     callbacks: {
         async session({ session, token }) {
-
             console.log(session, 'session');
             console.log(token, 'token');
             if (token.user.data !== undefined) {
@@ -27,8 +31,7 @@ const authOptions = {
             return session
         },
         async signIn({ account, user }) {
-            console.log(account,'account');
-            console.log(user,'user');
+            console.log(user, 'user');
             return true
         }
     }

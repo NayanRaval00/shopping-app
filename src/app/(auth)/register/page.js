@@ -23,12 +23,12 @@ const Registration = () => {
     })
 
     const schema = yup.object().shape({
-        firstname: yup.string().trim().required('First Name is required'),
+        name: yup.string().trim().required('First Name is required'),
         lastname: yup.string().trim().required('Last Name is required'),
         mobile: yup.string().trim().required('Mobile Number is required'),
         email: yup.string().trim().email('Invalid email').required('Email is required'),
         password: yup.string().trim().required('Password is required'),
-        confirm_password: yup.string().trim().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
+        password_confirmation: yup.string().trim().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
     });
     const {
         register,
@@ -39,23 +39,21 @@ const Registration = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = async event => {
+    const onSubmit = async data => {
         try {
             const res = await userRegister(data)
             if (res.status == 'success') {
                 setSuccessAlert(res.message)
                 reset()
-                setLoading(false)
             }
         } catch (error) {
             const entries = error.errors
             for (const field in entries) {
-                setError(field, { message: entries[field][0] })
+                setErrorAlert(error.message)
             }
             if (error?.errors && error?.errors.length == 0) {
                 setErrorAlert(error.message)
             }
-            setLoading(false)
         }
     }
 

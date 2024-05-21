@@ -1,95 +1,37 @@
 'use client'
-import { useRef, useState } from 'react'
 import Header from "./components/Includes/Header";
 import Footer from "./components/Includes/Footer";
 import Image from 'next/image'
-import Slider from 'react-slick'
+import HomeSlider from './components/Home/HomeSlider';
+import animationData from "../../public/anitmations/lottie_lego.json";
+import Lottie from "react-lottie";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
+
 
 export default function Home() {
 
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const sliderRef = useRef(null)
-
-  var settings = {
-    dots: true,
-    arrow: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+  const defaultOptions = {
+    loop: true,
     autoplay: true,
-    autoplaySpeed: 3000,
-    initialSlide: 0,
-    //variableWidth: true,
-    responsive: [
-      {
-        breakpoint: 991,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          variableWidth: false
-        }
-      },
-      {
-        breakpoint: 767,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          variableWidth: false
-        }
-      }
-    ],
-    afterChange: current => {
-      setCurrentSlide(current)
-    }
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
+
+  useEffect(() => {
+    AOS.init();
+    AOS.refresh();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div id="page">
         <Header />
-        <Slider className='thankyou-order-slider' {...settings} ref={sliderRef} >
-          <div>
-            <Image
-              src="/images/img_bg_1.jpg"
-              sizes="50vw"
-              width={50}
-              height={50}
-              style={{
-                width: '100%',
-                height: 'auto',
-              }}
-              alt="Picture of the author"
-            />
-          </div>
-          <div>
-            <Image
-              src="/images/img_bg_2.jpg"
-              sizes="50vw"
-              width={50}
-              height={50}
-              style={{
-                width: '100%',
-                height: 'auto',
-              }}
-              alt="Picture of the author"
-            />
-          </div>
-          <div>
-            <Image
-              src="/images/img_bg_3.jpg"
-              sizes="50vw"
-              width={50}
-              height={50}
-              style={{
-                width: '100%',
-                height: 'auto',
-              }}
-              alt="Picture of the author"
-            />
-          </div>
-        </Slider>
-
-
+        <HomeSlider />
+        <Lottie options={defaultOptions} height={400} width={400} />;
         <div className="colorlib-intro" style={{ textAlign: "center" }}>
           <div className="container">
             <div className="row">
@@ -103,8 +45,8 @@ export default function Home() {
         <div className="colorlib-product">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-sm-6 text-center">
-                <div className="featured">
+              <div className="col-sm-6 text-center" >
+                <div className="featured" data-aos="fade-right">
                   <span className="featured-img" style={{ backgroundImage: "url(images/men.jpg)" }}></span>
                   <div className="desc">
                     <h2><span >Shop Men's Collection</span></h2>
@@ -112,7 +54,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="col-sm-6 text-center">
-                <div className="featured">
+                <div className="featured" data-aos="fade-left">
                   <span className="featured-img" style={{ backgroundImage: "url(images/women.jpg)" }}></span>
                   <div className="desc">
                     <h2><span >Shop Women's Collection</span></h2>
@@ -134,8 +76,7 @@ export default function Home() {
               {/* Add your product entries here */}
               <div className="col-lg-3 mb-4 text-center">
                 <div className="product-entry border">
-                  <span className="prod-img">
-                    {/* <img src="images/item-1.jpg" className="img-fluid" alt="Free html5 bootstrap 4 template"> */}
+                  <span className="prod-img card-zoom-image bg-beetle">
                     <Image
                       src="/images/item-1.jpg"
                       width={200}

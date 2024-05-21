@@ -14,39 +14,35 @@ import '../../../../public/css/style.css';
 import Link from 'next/link';
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
+import { signOut, useSession } from 'next-auth/react';
+import useAuthUserSettings from '../../../../lib/useAuthUserSettings';
+import { FaSearch } from "react-icons/fa";
 
 const Header = (props) => {
+    const { userData } = useSession();
+    console.log(userData?.user_data, 'userData');
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [batteryStatus, setBatteryStatus] = useState(null);
-    const [batteryCharging, setBatteryCharging] = useState(false);
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const { AuthUserData } = useAuthUserSettings()
+    console.log(AuthUserData, 'AuthUserData');
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+    const toggleProfileDropdown = () => {
+        setProfileDropdownOpen(!profileDropdownOpen);
+    };
+    const handleLogout = () => {
+        signOut()
+    }
 
-    const appName = process.env.APP_NAME ? process.env.APP_NAME : "TITLE";
-
+    const appName = process.env.NEXT_PUBLIC_APP_NAME ? process.env.NEXT_PUBLIC_APP_NAME : "NAYAN";
     useEffect(() => {
-        let battery; // Define battery variable outside the promise callback
-
-        // battery status update
-        const updateBatteryStatus = () => {
-            if (battery) { // Check if battery is defined
-                setBatteryStatus(Math.round(battery.level * 100));
-                setBatteryCharging(battery.charging);
-            }
-        };
-
-        navigator.getBattery().then(function (bat) {
-            battery = bat;
-            updateBatteryStatus();
-            battery.addEventListener('levelchange', updateBatteryStatus);
-        });
-
-        // dropdown click outside handler
         const handleOutsideClick = (event) => {
-            if (!event.target.closest('.has-dropdown')) {
+            console.log(event, 'event');
+            if (!event.target.closest('.has-dropdown') && !event.target.closest('.profile-dropdown')) {
                 setDropdownOpen(false);
+                setProfileDropdownOpen(false);
             }
         };
 
@@ -56,9 +52,6 @@ const Header = (props) => {
 
         return () => {
             document.removeEventListener('click', handleOutsideClick);
-            if (battery) {
-                battery.removeEventListener('levelchange', updateBatteryStatus);
-            }
         };
     }, [dropdownOpen]);
 
@@ -74,11 +67,9 @@ const Header = (props) => {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <form action="#" className="search-wrap">
-                                    <div className="form-group">
-                                        <div className='battery-level'><span>Battery Level: {batteryStatus}</span></div>
-                                        <div className='battery-charging'><span>Battery Charging: {batteryCharging ? 'Yes' : 'No'}</span></div>
+                                    <div className="form-group ">
                                         <input type="search" className="form-control search" placeholder="Search" />
-                                        <button className="btn btn-primary submit-search text-center" type="submit"><i className="icon-search"></i></button>
+                                        <button className="btn btn-primary submit-search text-center" type="submit"><FaSearch className='w-full' /></button>
                                     </div>
                                 </form>
                             </div>
@@ -89,7 +80,7 @@ const Header = (props) => {
                                     <li className="active"><Link href="/">Home</Link></li>
                                     <li className={dropdownOpen ? 'has-dropdown active' : 'has-dropdown'}>
                                         <span style={{ cursor: 'pointer', marginRight: '12px' }} onMouseEnter={toggleDropdown}>
-                                            <Link href='/men'>Men</Link>
+                                            <Link href={'/man'}>Men</Link>
                                         </span>
                                         <ul className={dropdownOpen ? 'dropdown active animated-fast fadeInUpMenu' : 'dropdown'} style={dropdownOpen ? { display: 'block' } : {}}>
                                             <li><Link href="/product/1">Product Details</Link></li>
@@ -105,6 +96,28 @@ const Header = (props) => {
                                     <li className="cart"><span><i className="icon-shopping-cart"></i> <Link href="/cart">Cart [{props.cartCount}]</Link></span></li>
                                     <li>
                                         <Link href={'/login'}>Login/Register</Link>
+                                    </li>
+                                    <li className={dropdownOpen ? 'profile-dropdown has-dropdown active' : 'profile-dropdown has-dropdown'}>
+                                        <span style={{ cursor: 'pointer', marginRight: '12px' }} onClickCapture={toggleProfileDropdown}>
+                                            <span>Profile</span>
+                                        </span>
+                                        <ul className={profileDropdownOpen ? 'dropdown active animated-fast fadeInUpMenu' : 'dropdown'} style={profileDropdownOpen ? { display: 'block' } : {}}>
+                                            <li><Link href="/product/1">Profile Details</Link></li>
+                                            {/* <li><span onClick={logoutUser()}>Logout</span></li> */}
+                                            <li>
+
+                                                <Link
+                                                    href='#'
+                                                    className='icon-with-menu'
+                                                    onClick={e => {
+                                                        e.preventDefault()
+                                                        handleLogout()
+                                                    }}
+                                                >
+                                                    Logout
+                                                </Link>
+                                            </li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </div>
