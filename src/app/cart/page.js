@@ -1,12 +1,18 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useState } from 'react';
 import Footer from "../components/Includes/Footer";
 import Header from "../components/Includes/Header";
 
 export default function Cart() {
+    const [cartData, setCartData] = useState(null);
 
-    const cartData = JSON.parse(localStorage.getItem('cart_data'));
-    console.log(cartData);
+    useEffect(() => {
+            const storedCartData = localStorage.getItem('cart_data');
+            if (storedCartData) {
+                setCartData(JSON.parse(storedCartData));
+            }
+    }, []);
+
     return (
         <>
             <Header />
@@ -19,7 +25,6 @@ export default function Cart() {
                     </div>
                 </div>
             </div>
-
 
             <div className="colorlib-product">
                 <div className="container">
@@ -68,22 +73,22 @@ export default function Cart() {
                                             <div className="product-img" style={{ backgroundImage: `url(/images/item-1.jpg)` }}>
                                             </div>
                                             <div className="display-tc">
-                                                <h3>{"Nayan"}</h3>
+                                                <h3>{item.name}</h3>
                                             </div>
                                         </div>
                                         <div className="one-eight text-center">
                                             <div className="display-tc">
-                                                <span className="price">{"100"}</span>
+                                                <span className="price">{item.price}</span>
                                             </div>
                                         </div>
                                         <div className="one-eight text-center">
                                             <div className="display-tc">
-                                                <input type="text" id="quantity" name="quantity" className="form-control input-number text-center" value={item.count} min="1" max="100" />
+                                                <input type="text" id="quantity" name="quantity" className="form-control input-number text-center" value={item.count} min="1" max="100" readOnly />
                                             </div>
                                         </div>
                                         <div className="one-eight text-center">
                                             <div className="display-tc">
-                                                <span className="price">{item.count * 10}</span>
+                                                <span className="price">{item.count * item.price}</span>
                                             </div>
                                         </div>
                                         <div className="one-eight text-center">
@@ -94,7 +99,6 @@ export default function Cart() {
                                     </div>
                                 ))
                             ) : (
-                                // If cartData is null, render a message or fallback content
                                 <div>No items in the cart</div>
                             )}
 
@@ -188,5 +192,5 @@ export default function Cart() {
             </div>
             <Footer />
         </>
-    )
+    );
 }

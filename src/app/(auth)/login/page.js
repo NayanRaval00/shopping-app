@@ -1,54 +1,53 @@
 'use client'
+
 import Link from 'next/link';
 import '../../../../public/css/bootstrap.min.css';
 import '../../../../public/css/login-css.css';
 import LoginForm from "@/app/components/Form/Login"
 import { AuthProvider } from '@/context/AuthContext';
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { signIn } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react';
+import { useSession } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import AlertMessage from '@/app/components/AlertMessage/AlertMessage';
 import useCookieOperations from '../../../../lib/useCookieOperations';
 
-const Login = () => {
-
-    const { data: userData } = useSession();
-    console.log(userData, 'userData');
-    const urlParams = useSearchParams()
-    const [successAlert, setSuccessAlert] = useState(null)
-    const [errorAlert, setErrorAlert] = useState(null)
-    const { setCookieValue } = useCookieOperations('user_data')
+const LoginComponent = () => {
+    const { data: userData, status } = useSession();
+    const urlParams = useSearchParams();
+    const [successAlert, setSuccessAlert] = useState(null);
+    const [errorAlert, setErrorAlert] = useState(null);
+    const { setCookieValue } = useCookieOperations('user_data');
     const [loginForm, setLoginForm] = useState({
         email: '',
         password: ''
-    })
-    const error = urlParams.get('error')
-    const onSubmit = async event => {
+    });
 
+    const error = urlParams.get('error');
+    const referrer = urlParams.get('referrer');
+    const path = referrer ? new URL(referrer).pathname : null;
+
+    const onSubmit = async () => {
         const session = await getSession();
-        console.log(session, 'session');
 
         try {
-            //setLoading(true)  
-            const res = await signIn('login', { ...loginForm, redirect: false })
-            console.log(res, 'res');
-            //   setLoading(false)
+            const res = await signIn('login', { ...loginForm, redirect: false });
             if (res.error) {
-                setErrorAlert(res.error)
+                setErrorAlert(res.error);
             }
         } catch (error) {
-            setErrorAlert(error.message, "error")
-            // setLoading(false)
+            setErrorAlert(error.message, "error");
         }
-    }
+    };
+
     const schema = yup.object().shape({
         email: yup.string().trim().email('Invalid email').required('Email is required'),
         password: yup.string().trim().required('Password is required'),
     });
+
     const {
         register,
         setValue,
@@ -58,40 +57,39 @@ const Login = () => {
     } = useForm({
         resolver: yupResolver(schema),
     });
+
     const handleChange = event => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
         setLoginForm(prevValues => ({
             ...prevValues,
             [name]: value
-        }))
-        if (name == 'email') {
-            setValue('email', value)
-            trigger('email')
+        }));
+        if (name === 'email') {
+            setValue('email', value);
+            trigger('email');
         } else {
-            setValue('password', value)
-            trigger('password')
+            setValue('password', value);
+            trigger('password');
         }
-    }
-    const referrer = urlParams.get('referrer')
-    const path = referrer ? new URL(referrer).pathname : null
+    };
 
     useEffect(() => {
         if (userData?.user) {
-            console.log(userData, 'userData');
-            if (userData?.user) {
-                setCookieValue(userData.user)
-            }
+            setCookieValue(userData.user);
+            window.location.href = path ? path : '/';
         }
-        if (userData?.user) {
-            window.location.href = path ? path : '/'
-        }
-    }, [userData])
+    }, [userData, setCookieValue, path]);
+
     useEffect(() => {
-        console.log(userData, 'userData');
         if (error) {
-            setErrorAlert(error)
+            setErrorAlert(error);
         }
-    }, [error])
+    }, [error]);
+
+    if (status === 'loading') {
+        return <div>Loading...</div>;
+    }
+
     return (
         <section className="vsh-100 gradient-custom">
             <div className="container py-5 h-100">
@@ -99,7 +97,6 @@ const Login = () => {
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div className="card bg-dark text-white" style={{ borderRadius: 1 }}>
                             <div className="card-body p-5 text-center">
-
                                 <div className="mb-md-5 mt-md-4 pb-5">
                                     <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
                                     <p className="text-white-50 mb-5">Please enter your login and password!</p>
@@ -117,7 +114,6 @@ const Login = () => {
                                                 register={register}
                                                 errors={errors}
                                             />
-
                                             <button className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                                         </form>
                                     </AuthProvider>
@@ -137,7 +133,13 @@ const Login = () => {
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default Login
+const Login = () => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <LoginComponent />
+    </Suspense>
+);
+
+export default Login;

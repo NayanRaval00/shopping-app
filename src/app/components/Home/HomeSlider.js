@@ -1,13 +1,12 @@
-import Slider from "react-slick"
-import { useRef, useState } from 'react'
-import Image from "next/image"
+import Slider from "react-slick";
+import { useRef, useState } from 'react';
+import Image from "next/image";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./HomeSlider.module.css"
 
-const HomeSlider = ({ }) => {
-    const [currentSlide, setCurrentSlide] = useState(0)
-    const sliderRef = useRef(null)
+const HomeSlider = () => {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const sliderRef = useRef(null);
 
     let settings = {
         dots: true,
@@ -46,9 +45,10 @@ const HomeSlider = ({ }) => {
             }
         ],
         afterChange: current => {
-            setCurrentSlide(current)
+            setCurrentSlide(current);
         }
     };
+
     const images = [
         '/images/img_bg_1.jpg',
         '/images/img_bg_2.jpg',
@@ -56,25 +56,23 @@ const HomeSlider = ({ }) => {
     ];
 
     return (
-        <>
         <div className="container mx-auto px-4 w-96">
-            <Slider className='thankyou-order-slider' {...settings} ref={sliderRef} >
+            <Slider className='thankyou-order-slider' {...settings} ref={sliderRef}>
                 {images.map((image) => (
-                    <div>
+                    <div key={image}> {/* Add unique key prop */}
                         <Image
                             src={image}
                             sizes="50vw"
                             width={50}
                             height={50}
                             className="w-full h-48"
-                            alt="Picture of the author"
+                            alt="Slide image"
                         />
                     </div>
                 ))}
-            </Slider >
+            </Slider>
         </div>
-        </>
-
     );
-}
-export default HomeSlider
+};
+
+export default HomeSlider;
