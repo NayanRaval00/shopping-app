@@ -21,8 +21,6 @@ const authOptions = {
     },
     callbacks: {
         async session({ session, token }) {
-            console.log(session, 'session');
-            console.log(token, 'token');
             if (token.user.data !== undefined) {
                 session.user = token.user.data
             } else {
@@ -31,7 +29,6 @@ const authOptions = {
             return session
         },
         async signIn({ account, user }) {
-            console.log(user, 'user');
             return true
         }
     }

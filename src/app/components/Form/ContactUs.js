@@ -23,7 +23,6 @@ const ContactUs = ({
 
     const onSubmit = (data) => {
         // Handle form submission here
-        console.log(data);
     };
 
     return (

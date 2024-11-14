@@ -1,9 +1,12 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Footer from "@/app/components/Includes/Footer";
 import Header from "@/app/components/Includes/Header";
 import Image from "next/image";
 import Slider from "react-slick";
+import { addToCart } from '../../../../lib/api/cart/cart';
+import AlertMessage from '@/app/components/AlertMessage/AlertMessage';
+import { useSearchParams } from 'next/navigation';
 
 export default function ProductDetails() {
     const sliderRef = useRef(null)
@@ -16,15 +19,23 @@ export default function ProductDetails() {
     const [activeTab, setActiveTab] = useState('description');
     const [count, setCount] = useState(1);
 
-    const [size, setSize] = useState('');
-    const [width, setWidth] = useState('');
+    const [selectedSize, setSize] = useState('');
+    const [color, setColor] = useState('white');
+    const [selectedWidth, setWidth] = useState('');
+
 
     const [cartCount, setCartCount] = useState();
+    const [errorAlert, setErrorAlert] = useState(null);
+    const [successAlert, setSuccessAlert] = useState(null);
 
-    // const [quantity, setQuantity] = useState(1);
+    const urlParams = useSearchParams();
+
+    const error = urlParams.get('error');
+
 
     const handleSizeChange = (selectedSize) => {
         setSize(selectedSize);
+        setColor('pink');
     };
 
     const handleWidthChange = (selectedWidth) => {
@@ -46,7 +57,7 @@ export default function ProductDetails() {
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
-    var settings = {
+    let settings = {
         dots: true,
         arrow: false,
         infinite: true,
@@ -63,43 +74,52 @@ export default function ProductDetails() {
     };
 
 
-    const handleAddToCart = () => {
-    
-
-        // Prepare JSON object for API call
-        const newObject = {
-            size,
-            width,
-            count
-        };
-        const existingDataJSON = localStorage.getItem('cart_data');
-
-        if (newObject.size == '' || newObject.width == '' || newObject.count == '') {
-            alert('Please select size, width and quantity!');
-        } else {
-
-            let existingData = existingDataJSON ? JSON.parse(existingDataJSON) : [];
-
-            if (!Array.isArray(existingData)) {
-                existingData = [];
-            }
-
-            if (newObject.size != null || newObject.width != null || newObject.count != null) {
-                existingData.push(newObject);
-            } else {
-                alert('Quantity must be greater than 0!');
-            }
-            localStorage.setItem('cart_data', JSON.stringify(existingData));
-            alert('Item added to cart!');
-            console.log(existingData.length);
-            setCartCount(JSON.parse(existingDataJSON).length + 1);
+    const handleAddToCart = async () => {
+        const newObject = { selectedSize, selectedWidth, count };
+        console.log(newObject, 'newObject');
+        if (!newObject.selectedSize || !newObject.selectedWidth || !newObject.count) {
+            alert('Please select size, width, and quantity!');
+            return;
         }
 
-    };
+        const existingDataJSON = localStorage.getItem('cart_data');
+        let existingData = existingDataJSON ? JSON.parse(existingDataJSON) : [];
 
+        if (!Array.isArray(existingData)) {
+            existingData = [];
+        }
+
+        existingData.push(newObject);
+
+        try {
+            const apiResponse = await addToCart();
+            console.log(apiResponse, 'apiResponse');
+            if (apiResponse.status === 201) {
+                localStorage.setItem('cart_data', JSON.stringify(existingData));
+                alert('Item added to cart!');
+                setCartCount(existingData.length);
+            } else {
+                alert('Failed to add item to cart. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error while adding to cart:', error);
+            setErrorAlert(error.message, "error");
+        }
+    };
+    useEffect(() => {
+        if (error) {
+            setErrorAlert(error);
+        }
+    }, [error]);
     return (
         <>
             <Header cartCount={cartCount} />
+            <AlertMessage
+                successAlert={successAlert}
+                setSuccessAlert={setSuccessAlert}
+                errorAlert={errorAlert}
+                setErrorAlert={setErrorAlert}
+            />
             <div className="breadcrumbs">
                 <div className="container">
                     <div className="row">
@@ -146,7 +166,8 @@ export default function ProductDetails() {
                                                 <li key={index}
                                                     style={{
                                                         cursor: 'pointer',
-                                                        backgroundColor: size === index ? 'blue' : 'rgb(136 200 188)'
+                                                        backgroundColor: size === selectedSize ? color : 'rgb(136, 200, 188)',
+                                                        color: size === selectedSize ? 'white' : 'black'
                                                     }}
                                                     onClick={() => handleSizeChange(size)}>{size}</li>
                                             ))}
@@ -159,7 +180,7 @@ export default function ProductDetails() {
                                                 <li key={index} onClick={() => handleWidthChange(width)}
                                                     style={{
                                                         cursor: 'pointer',
-                                                        backgroundColor: size === index ? 'blue' : 'rgb(136 200 188)'
+                                                        backgroundColor: width === selectedWidth ? color : 'rgb(136 200 188)'
                                                     }}
                                                 >{width}</li>
                                             ))}
