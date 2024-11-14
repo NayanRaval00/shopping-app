@@ -29,9 +29,13 @@ function RootContent({ children }) {
   const { showSideBarData } = useSidebar();
 
   return (
-    <div className={showSideBarData ? "overflow offcanvas" : ""}>
+    <div className={showSideBarData ? "overflow offcanvas" : ""}
+   
+    >
       <ProgressBarProvider>{children}</ProgressBarProvider>
-      <div id="colorlib-offcanvas">
+      <div id="colorlib-offcanvas"
+       style={{ display: showSideBarData ? "block" : "none" }}
+      >
         <ul>
           <li className="active"><Link href="/">Home</Link></li>
           <li className=''>
