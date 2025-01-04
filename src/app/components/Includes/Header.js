@@ -18,12 +18,18 @@ import { signOut, useSession } from 'next-auth/react';
 import useAuthUserSettings from '../../../../lib/useAuthUserSettings';
 import { FaSearch } from "react-icons/fa";
 import { useSidebar } from '@/context/SidebarContext';
+import { addToCart, retrieveCartDetails } from '../../../../lib/api/cart/cart';
+import AlertMessage from '../AlertMessage/AlertMessage';
 
 const Header = (props) => {
+    const [cartValue, setCartValue] = useState(props.initialValue);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const { showSideBarData, toggleSidebar } = useSidebar();
     const { AuthUserData } = useAuthUserSettings()
+    const [errorAlert, setErrorAlert] = useState(null);
+    const [successAlert, setSuccessAlert] = useState(null);
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
@@ -35,8 +41,24 @@ const Header = (props) => {
         signOut()
     }
 
+    const getCartDetails = async () => {
+
+        try {
+            const apiResponse = await retrieveCartDetails();
+            if (apiResponse.status === 200) {
+                setCartValue(apiResponse?.data.length);
+            } else {
+                alert('Failed to add item to cart. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error while adding to cart:', error);
+            setErrorAlert(error.message, "error");
+        }
+    };
+
     const appName = process.env.NEXT_PUBLIC_APP_NAME ? process.env.NEXT_PUBLIC_APP_NAME : "NAYAN";
     useEffect(() => {
+        getCartDetails();
         const handleOutsideClick = (event) => {
             if (!event.target.closest('.has-dropdown') && !event.target.closest('.profile-dropdown')) {
                 setDropdownOpen(false);
@@ -55,6 +77,12 @@ const Header = (props) => {
 
     return (
         <header>
+            <AlertMessage
+                successAlert={successAlert}
+                setSuccessAlert={setSuccessAlert}
+                errorAlert={errorAlert}
+                setErrorAlert={setErrorAlert}
+            />
             <title>{appName}</title>
             <nav className="colorlib-nav" role="navigation">
                 <div className="top-menu">
@@ -98,7 +126,7 @@ const Header = (props) => {
                                     <li><span style={{ cursor: 'pointer' }}><Link href="/women">women</Link></span></li>
                                     <li><Link href="/about">About</Link></li>
                                     <li><Link href="/contact">Contact</Link></li>
-                                    <li className="cart"><span><i className="icon-shopping-cart"></i> <Link href="/cart">Cart [{props.cartCount}]</Link></span></li>
+                                    <li className="cart"><span><i className="icon-shopping-cart"></i> <Link href="/cart">Cart [{cartValue}]</Link></span></li>
                                     <li>
                                         <Link href={'/login'}>Login/Register</Link>
                                     </li>
@@ -152,9 +180,6 @@ const Header = (props) => {
                     </div>
                 </div>
             </nav>
-
-
-
         </header >
     );
 };

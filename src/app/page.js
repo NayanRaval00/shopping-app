@@ -72,76 +72,87 @@ export default function Home() {
                 <h2>Best Sellers</h2>
               </div>
             </div>
+
+            {/* test card */}
             <div className="row row-pb-md">
-              {/* Add your product entries here */}
-              <div className="col-lg-3 mb-4 text-center">
-                <div className="product-entry border">
-                  <span className="prod-img card-zoom-image bg-beetle">
-                    <Image
-                      src="/images/item-1.jpg"
-                      width={200}
-                      height={200}
-                      alt="Picture of the author"
-                    />
-                  </span>
-                  <div className="desc">
-                    <h2><span >Women's Boots Shoes Maca</span></h2>
-                    <span className="price">$139.00</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 mb-4 text-center">
-                <div className="product-entry border">
-                  <span className="prod-img">
-                    <Image
-                      src="/images/item-5.jpg"
-                      width={200}
-                      height={200}
-                      alt="Picture of the author"
-                    />
 
-                  </span>
-                  <div className="desc">
-                    <h2><span>Women's Minam Meaghan</span></h2>
-                    <span className="price">$139.00</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 mb-4 text-center">
+              <div className="shadow-lg  col-lg-3">
                 <div className="product-entry border">
-                  <span className="prod-img">
-                    <Image
-                      src="/images/item-2.jpg"
-                      width={200}
-                      height={200}
-                      alt="Picture of the author"
-                    />
 
-                  </span>
-                  <div className="desc">
-                    <h2><span >Men's Taja Commissioner</span></h2>
+                  <Image
+                    className="w-full"
+                    src="/images/item-1.jpg"
+                    width={200}
+                    height={200}
+                    alt="Sunset in the mountains"
+                  />
+
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">Women's Boots Shoes Maca</div>
                     <span className="price">$139.00</span>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-3 mb-4 text-center">
+
+              <div className="shadow-lg border col-lg-3">
                 <div className="product-entry border">
-                  <span className="prod-img">
-                    <Image
-                      src="/images/item-3.jpg"
-                      width={200}
-                      height={200}
-                      alt="Picture of the author"
-                    />
 
-                  </span>
-                  <div className="desc">
-                    <h2><span >Men's Taja Commissioner</span></h2>
+                  <Image
+                    className="w-full"
+                    src="/images/item-1.jpg"
+                    width={200}
+                    height={200}
+                    alt="Sunset in the mountains"
+                  />
+
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">Women's Minam Meaghan
+                    </div>
                     <span className="price">$139.00</span>
                   </div>
                 </div>
               </div>
+
+              <div className="shadow-lg border col-lg-3">
+                <div className="product-entry border">
+
+                  <Image
+                    className="w-full"
+                    src="/images/item-1.jpg"
+                    width={200}
+                    height={200}
+                    alt="Sunset in the mountains"
+                  />
+
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">Men's Taja Commissioner</div>
+                    <span className="price">$139.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="shadow-lg border col-lg-3">
+                <div className="product-entry border">
+
+                  <Image
+                    className="w-full"
+                    src="/images/item-3.jpg"
+                    width={200}
+                    height={200}
+                    alt="Sunset in the mountains"
+                  />
+
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">Men's Taja Commissioner
+                    </div>
+                    <span className="price">$139.00</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
+            {/* test card */}
+
             <div className="row">
               <div className="col-md-12 text-center">
                 <p><span className="btn btn-primary btn-lg">Shop All Products</span></p>
